@@ -1,6 +1,6 @@
 Name:           pcsc-lite
 Version:        1.5.2
-Release:        15%{?dist}
+Release:        16%{?dist}
 Summary:        PC/SC Lite smart card framework and applications
 %define upstream_build 2795
 
@@ -21,6 +21,7 @@ Patch9:		%{name}-1.5.2-libusb-scheme.patch
 Patch10:	%{name}-1.5.2-free-property.patch
 Patch11:	%{name}-1.5.2-unlock_mutex.patch
 Patch12:	%{name}-1.5.2-clean_sockets.patch
+Patch13:	%{name}-1.5.2-silence-not-inserted-warnings.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -85,6 +86,7 @@ Group:          Documentation
 %patch10 -p0 -b .free-property
 %patch11 -p0 -b .unlock_mutex
 %patch12 -p0 -b .clean_sockets
+%patch13 -p0 -b .silence
 
 %build
 %configure \
@@ -171,6 +173,9 @@ fi
 
 
 %changelog
+* Mon Nov 7 2016  Bob Relyea <rrelyea@redhat.com> - 1.5.2-16
+- silence card not inserted warnings in the log file unless debug is turned on.
+
 * Wed Feb 25 2015  Bob Relyea <rrelyea@redhat.com> - 1.5.2-15
 - unlock mutex on failure
 - clean up socket files after start at init time (allows restart after
