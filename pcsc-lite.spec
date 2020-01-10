@@ -1,6 +1,6 @@
 Name:           pcsc-lite
 Version:        1.5.2
-Release:        11%{?dist}
+Release:        13%{?dist}
 Summary:        PC/SC Lite smart card framework and applications
 %define upstream_build 2795
 
@@ -16,6 +16,7 @@ Patch4:         %{name}-1.5-unlock.patch
 Patch5:         %{name}-1.5.2-overflow.patch
 Patch6:         %{name}-1.5-init-fix.patch
 Patch7:         %{name}-CVE-2010-4531.patch
+Patch8:		%{name}-1.5.2-no_hang.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -75,6 +76,7 @@ Group:          Documentation
 %patch5 -p0 -b .overflow
 %patch6 -p0 -b .init-fix
 %patch7 -p0 -b .cve-2010-4531
+%patch8 -p0 -b .no_hang
 
 %build
 %configure \
@@ -161,6 +163,12 @@ fi
 
 
 %changelog
+* Fri May 10 2013  Bob Relyea <rrelyea@redhat.com> - 1.5.2-13
+- rest of hang patch
+
+* Tue Apr 23 2013  Bob Relyea <rrelyea@redhat.com> - 1.5.2-12
+- hang patch
+
 * Thu Jan 3 2013  Bob Relyea <rrelyea@redhat.com> - 1.5.2-11
 - fix overflow issue introduced in 1.5.2-5 and incorrectly corrected in
   1.5.2-6
