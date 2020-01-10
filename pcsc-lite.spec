@@ -1,6 +1,6 @@
 Name:           pcsc-lite
 Version:        1.5.2
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        PC/SC Lite smart card framework and applications
 %define upstream_build 2795
 
@@ -19,6 +19,8 @@ Patch7:         %{name}-CVE-2010-4531.patch
 Patch8:		%{name}-1.5.2-no_hang.patch
 Patch9:		%{name}-1.5.2-libusb-scheme.patch
 Patch10:	%{name}-1.5.2-free-property.patch
+Patch11:	%{name}-1.5.2-unlock_mutex.patch
+Patch12:	%{name}-1.5.2-clean_sockets.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -81,6 +83,8 @@ Group:          Documentation
 %patch8 -p0 -b .no_hang
 %patch9 -p1 -b .lib-usb-scheme
 %patch10 -p0 -b .free-property
+%patch11 -p0 -b .unlock_mutex
+%patch12 -p0 -b .clean_sockets
 
 %build
 %configure \
@@ -167,6 +171,11 @@ fi
 
 
 %changelog
+* Wed Feb 25 2015  Bob Relyea <rrelyea@redhat.com> - 1.5.2-15
+- unlock mutex on failure
+- clean up socket files after start at init time (allows restart after
+  crash or hard fail of pcscd)
+
 * Fri May 10 2013  Bob Relyea <rrelyea@redhat.com> - 1.5.2-14
 - handle different usb scheme needed to support ReinerSCT Cyberjack
   readers. Patch was supplied by customer.
