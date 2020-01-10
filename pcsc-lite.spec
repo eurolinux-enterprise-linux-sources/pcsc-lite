@@ -1,6 +1,6 @@
 Name:           pcsc-lite
 Version:        1.5.2
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        PC/SC Lite smart card framework and applications
 %define upstream_build 2795
 
@@ -17,6 +17,8 @@ Patch5:         %{name}-1.5.2-overflow.patch
 Patch6:         %{name}-1.5-init-fix.patch
 Patch7:         %{name}-CVE-2010-4531.patch
 Patch8:		%{name}-1.5.2-no_hang.patch
+Patch9:		%{name}-1.5.2-libusb-scheme.patch
+Patch10:	%{name}-1.5.2-free-property.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -77,6 +79,8 @@ Group:          Documentation
 %patch6 -p0 -b .init-fix
 %patch7 -p0 -b .cve-2010-4531
 %patch8 -p0 -b .no_hang
+%patch9 -p1 -b .lib-usb-scheme
+%patch10 -p0 -b .free-property
 
 %build
 %configure \
@@ -163,6 +167,10 @@ fi
 
 
 %changelog
+* Fri May 10 2013  Bob Relyea <rrelyea@redhat.com> - 1.5.2-14
+- handle different usb scheme needed to support ReinerSCT Cyberjack
+  readers. Patch was supplied by customer.
+
 * Fri May 10 2013  Bob Relyea <rrelyea@redhat.com> - 1.5.2-13
 - rest of hang patch
 
