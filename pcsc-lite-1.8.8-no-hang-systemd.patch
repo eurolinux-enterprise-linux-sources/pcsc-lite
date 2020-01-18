@@ -1,0 +1,22 @@
+diff -up ./src/winscard_clnt.c.no-hang ./src/winscard_clnt.c
+--- ./src/winscard_clnt.c.no-hang	2012-08-25 07:29:44.000000000 -0700
++++ ./src/winscard_clnt.c	2017-10-30 17:54:07.275158662 -0700
+@@ -124,6 +124,8 @@ static char sharing_shall_block = TRUE;
+ #define COLOR_MAGENTA "\33[35m"
+ #define COLOR_NORMAL "\33[0m"
+ 
++#define TIMEOUT_TIME  3 /* time to wait for an answer to the server on first connection (in seconds) */
++
+ #ifdef DO_TRACE
+ 
+ #include <stdio.h>
+@@ -558,7 +560,8 @@ static LONG SCardEstablishContextTH(DWOR
+ 			return rv;
+ 
+ 		/* Read a message from the server */
+-		rv = MessageReceive(&veStr, sizeof(veStr), dwClientID);
++		rv = MessageReceiveTimeout(CMD_VERSION, &veStr, sizeof(veStr),
++					dwClientID, TIMEOUT_TIME*1000L);
+ 		if (rv != SCARD_S_SUCCESS)
+ 		{
+ 			Log1(PCSC_LOG_CRITICAL,
