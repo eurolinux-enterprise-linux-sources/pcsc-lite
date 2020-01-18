@@ -2,13 +2,14 @@
 
 Name:           pcsc-lite
 Version:        1.8.8
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        PC/SC Lite smart card framework and applications
 
 Group:          System Environment/Daemons
 License:        BSD
 URL:            http://pcsclite.alioth.debian.org/
 Source0:        http://alioth.debian.org/download.php/%{upstream_build}/%{name}-%{version}.tar.bz2
+Patch1:		pcsc-lite-1.8.8-man-update.patch
 
 BuildRequires:  doxygen
 BuildRequires:  graphviz
@@ -57,6 +58,7 @@ Requires:       %{name}-libs = %{version}-%{release}
 
 %prep
 %setup -q
+%patch1 -p 0 -b .man-update
 
 # Convert to utf-8
 for file in ChangeLog; do
@@ -133,6 +135,9 @@ rm $RPM_BUILD_ROOT%{_docdir}/pcsc-lite/README.DAEMON
 
 
 %changelog
+* Wed Sep 24 2014 Robert Relyea <rrelyea@redhat.com> - 1.8.8-5
+- Update Man page
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 1.8.8-4
 - Mass rebuild 2014-01-24
 

@@ -1,0 +1,46 @@
+diff -up ./doc/pcscd.8.in.man_update ./doc/pcscd.8.in
+--- ./doc/pcscd.8.in.man_update	2014-09-24 14:37:55.975511547 -0700
++++ ./doc/pcscd.8.in	2014-09-24 14:47:13.080855265 -0700
+@@ -20,6 +20,9 @@ Specifies the file \fIfile\fP as an alte
+ Runs pcscd in the foreground and sends log messages to stderr instead of
+ syslog(3).
+ .TP
++.BR \-T ", " \-\-color
++use colored logs.
++.TP
+ .BR \-d ", " \-\-debug
+ use the lowest log level. Any log message of this level or above will be
+ sent to stderr or syslog(3) depending on the use of
+@@ -28,15 +31,30 @@ sent to stderr or syslog(3) depending on
+ .B \-\-info
+ use info log level. This is the default log level.
+ .TP
+-.B \-\-error
++.BR \-e ", " \-\-error
+ use error log level.
+ .TP
+-.B \-\-critical
++.BR \-C ", " \-\-critical
+ use critical log level.
+ .PP
+ The log levels are ordered as: debug < info < error < critical. Use a
+ log level l will log this level and all the levels above it.
+ .TP
++.B \-\-force-reader-polling 
++Ignore the IFD_GENERATE_HOTPLUG reader capability
++.TP
++.BR \-t ", " \-\-max-thread	
++Set the maximum number of threads (default 200)
++.TP
++.BR \-s ", " \-\-max-card-handle-per-thread	
++Set the maximum number of card handle per thread (default: 200)
++.TP
++.BR \-r ", " \-\-max-card-handle-per-reader	
++Set the maximum number of card handle per reader (default: 200)
++.TP
++.BR \-x ", " \-\-auto-exit	
++Cause pcscd to quit after 60 seconds of inactivity
++.TP
+ .BR \-h ", " \-\-help
+ Displays information about the pcscd command line
+ .TP
