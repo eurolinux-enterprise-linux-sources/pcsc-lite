@@ -1,0 +1,114 @@
+diff -up ./src/configfile.l.coverity ./src/configfile.l
+--- ./src/configfile.l.coverity	2018-05-23 16:32:54.524430167 -0700
++++ ./src/configfile.l	2018-05-23 16:37:23.881925045 -0700
+@@ -191,9 +191,18 @@ int evaluatetoken(char *pcToken)
+ 		}
+ 		else
+ 		{
++			char *new_reader_list;
+ 			reader_list_size++;
+-			reader_list = realloc(reader_list, reader_list_size *
++			new_reader_list = realloc(reader_list, reader_list_size *
+ 				sizeof(SerialReader));
++			if (new_reader_list == NULL) {
++				free(reader_list);
++			}
++			reader_list = new_reader_list;
++		}
++		if (reader_list == NULL) {
++			tok_error("No Memory");
++			return 1;
+ 		}
+ 
+ 		/* end marker */
+diff -up ./src/sd-daemon.c.coverity ./src/sd-daemon.c
+--- ./src/sd-daemon.c.coverity	2018-05-23 16:28:02.571878672 -0700
++++ ./src/sd-daemon.c	2018-05-23 16:28:05.080883439 -0700
+@@ -95,7 +95,7 @@ _sd_export_ int sd_listen_fds(int unset_
+                 goto finish;
+         }
+ 
+-        if (!(e = getenv("LISTEN_FDS"))) {
++        if (!(e = secure_getenv("LISTEN_FDS"))) {
+                 r = 0;
+                 goto finish;
+         }
+diff -up ./src/winscard_clnt.c.coverity ./src/winscard_clnt.c
+--- ./src/winscard_clnt.c.coverity	2018-05-23 16:42:07.437434512 -0700
++++ ./src/winscard_clnt.c	2018-05-23 16:42:10.779440449 -0700
+@@ -1541,15 +1541,15 @@ retry:
+ 	if (SCARD_AUTOALLOCATE == dwReaderLen)
+ 	{
+ 		dwReaderLen = *pcchReaderLen;
+-		bufReader = malloc(dwReaderLen);
+-		if (NULL == bufReader)
++		if (NULL == mszReaderName)
+ 		{
+-			rv = SCARD_E_NO_MEMORY;
++			rv = SCARD_E_INVALID_PARAMETER;
+ 			goto end;
+ 		}
+-		if (NULL == mszReaderName)
++		bufReader = malloc(dwReaderLen);
++		if (NULL == bufReader)
+ 		{
+-			rv = SCARD_E_INVALID_PARAMETER;
++			rv = SCARD_E_NO_MEMORY;
+ 			goto end;
+ 		}
+ 		*(char **)mszReaderName = bufReader;
+@@ -1569,15 +1569,15 @@ retry:
+ 	if (SCARD_AUTOALLOCATE == dwAtrLen)
+ 	{
+ 		dwAtrLen = *pcbAtrLen;
+-		bufAtr = malloc(dwAtrLen);
+-		if (NULL == bufAtr)
++		if (NULL == pbAtr)
+ 		{
+-			rv = SCARD_E_NO_MEMORY;
++			rv = SCARD_E_INVALID_PARAMETER;
+ 			goto end;
+ 		}
+-		if (NULL == pbAtr)
++		bufAtr = malloc(dwAtrLen);
++		if (NULL == bufAtr)
+ 		{
+-			rv = SCARD_E_INVALID_PARAMETER;
++			rv = SCARD_E_NO_MEMORY;
+ 			goto end;
+ 		}
+ 		*(LPBYTE *)pbAtr = bufAtr;
+@@ -3098,15 +3098,15 @@ LONG SCardListReaderGroups(SCARDCONTEXT
+ 
+ 	if (SCARD_AUTOALLOCATE == *pcchGroups)
+ 	{
+-		buf = malloc(dwGroups);
+-		if (NULL == buf)
++		if (NULL == mszGroups)
+ 		{
+-			rv = SCARD_E_NO_MEMORY;
++			rv = SCARD_E_INVALID_PARAMETER;
+ 			goto end;
+ 		}
+-		if (NULL == mszGroups)
++		buf = malloc(dwGroups);
++		if (NULL == buf)
+ 		{
+-			rv = SCARD_E_INVALID_PARAMETER;
++			rv = SCARD_E_NO_MEMORY;
+ 			goto end;
+ 		}
+ 		*(char **)mszGroups = buf;
+diff -up ./src/winscard_svc.c.coverity ./src/winscard_svc.c
+--- ./src/winscard_svc.c.coverity	2018-05-23 16:30:31.037160692 -0700
++++ ./src/winscard_svc.c	2018-05-23 16:30:35.066168345 -0700
+@@ -856,7 +856,8 @@ static LONG MSGAddHandle(SCARDCONTEXT hC
+ 					"list_append failed with return value: %d", lrv);
+ 				retval = SCARD_E_NO_MEMORY;
+ 			}
+-			retval = SCARD_S_SUCCESS;
++			else
++				retval = SCARD_S_SUCCESS;
+ 		}
+ 
+ 		(void)pthread_mutex_unlock(&threadContext->cardsList_lock);

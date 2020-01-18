@@ -2,7 +2,7 @@
 
 Name:           pcsc-lite
 Version:        1.8.8
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        PC/SC Lite smart card framework and applications
 
 Group:          System Environment/Daemons
@@ -12,6 +12,7 @@ Source0:        http://alioth.debian.org/download.php/%{upstream_build}/%{name}-
 Patch1:		pcsc-lite-1.8.8-man-update.patch
 Patch2:		pcsc-lite-1.8.8-maxreaders.patch
 Patch3:		pcsc-lite-1.8.8-no-hang-systemd.patch
+Patch4:		pcsc-lite-1.8.8-coverity.patch
 
 BuildRequires:  doxygen
 BuildRequires:  graphviz
@@ -63,6 +64,7 @@ Requires:       %{name}-libs = %{version}-%{release}
 %patch1 -p 0 -b .man-update
 %patch2 -p 0 -b .maxreaders
 %patch3 -p 1 -b .no-hand-systemd
+%patch4 -p 0 -b .coverity
 
 # Convert to utf-8
 for file in ChangeLog; do
@@ -139,6 +141,10 @@ rm $RPM_BUILD_ROOT%{_docdir}/pcsc-lite/README.DAEMON
 
 
 %changelog
+* Wed May 23 2018 Robert Relyea <rrelyea@redhat.com> - 1.8.8-8
+- Fix coverity/CLAND/CPPChecks issues
+- Increase the number of supported readers for real.
+
 * Mon Oct 30 2017 Robert Relyea <rrelyea@redhat.com> - 1.8.8-7
 - Don't hang if the daemon is blocked by systemd
 - Make sure we have a new enough systemd-devel to have the udev headers
