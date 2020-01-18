@@ -1,0 +1,12 @@
+diff -up ./src/PCSC/pcsclite.h.maxreaders ./src/PCSC/pcsclite.h
+--- ./src/PCSC/pcsclite.h.maxreaders	2015-07-06 15:35:41.649580066 -0700
++++ ./src/PCSC/pcsclite.h	2015-07-06 15:35:51.167402468 -0700
+@@ -192,7 +192,7 @@ extern const SCARD_IO_REQUEST g_rgSCardT
+ 
+ #define PCSCLITE_VERSION_NUMBER		"1.8.8"	/**< Current version */
+ /** Maximum readers context (a slot is count as a reader) */
+-#define PCSCLITE_MAX_READERS_CONTEXTS			16
++#define PCSCLITE_MAX_READERS_CONTEXTS			32
+ 
+ #define MAX_READERNAME			128
+ 
